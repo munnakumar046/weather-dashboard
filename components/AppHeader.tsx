@@ -18,10 +18,29 @@ const AppHeader = () => {
         <p className="text-sm ">Local Weather</p>
       </div>
 
-      <div className="capitalize">{pageName}</div>
-      {/* Search Bar */}
-      <SearchField name="search">
-        {/* <Label>Search</Label> */}
+      {/* pageName */}
+      {/* <div className="capitalize text-3xl font-bold mr-60">{pageName}</div> */}
+      <div className="flex justify-between items-center w-200">
+        <div className="capitalize text-3xl font-bold">{pageName}</div>
+        {/* Search Bar */}
+        <form action="/">
+          <SearchField name="city">
+            {/* <Label>Search</Label> */}
+            <SearchField.Group>
+              <SearchField.SearchIcon />
+              <SearchField.Input
+                className="w-70"
+                placeholder="Search city or forecast..."
+              />
+              <SearchField.ClearButton />
+            </SearchField.Group>
+          </SearchField>
+        </form>
+      </div>
+
+      {/* {/* Search Bar */}
+      {/* <SearchField name="search">
+        <Label>Search</Label>
         <SearchField.Group>
           <SearchField.SearchIcon />
           <SearchField.Input
@@ -30,7 +49,7 @@ const AppHeader = () => {
           />
           <SearchField.ClearButton />
         </SearchField.Group>
-      </SearchField>
+      </SearchField> */}
 
       {/* Notifications + User */}
       <div className="flex items-center gap-6">

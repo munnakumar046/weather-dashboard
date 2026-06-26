@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Geist } from "next/font/google";
 import "../globals.css";
-import Header from "@/components/Header";
+
 import Sidebar from "@/components/Sidebar";
 import { ThemeProviders } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import AppHeader from "@/components/AppHeader";
+import GoogleMappProvider from "@/lib/GoogleMappProvider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -38,11 +39,12 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground">
         <ThemeProviders>
-          {/* Header */}
           <AppHeader />
           <div className="mt-16 flex h-[calc(100vh-64px)] overflow-y-hidden">
             <Sidebar />
-            <main className="flex-1 p-4 overflow-y-auto">{children}</main>
+            <main className="flex-1 p-4 overflow-y-auto">
+              <GoogleMappProvider>{children}</GoogleMappProvider>
+            </main>
           </div>
         </ThemeProviders>
       </body>

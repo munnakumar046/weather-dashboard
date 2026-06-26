@@ -1,7 +1,5 @@
 import { Button, Card, Meter } from "@heroui/react";
-
 import {
-  Droplet,
   DropletIcon,
   Eye,
   MapPin,
@@ -10,42 +8,46 @@ import {
   Sun,
   Wind,
 } from "lucide-react";
+import moment from "moment";
 
-interface weeklyData {
-  day: string;
-  temp: string;
-  rain: string;
-  humidity: string;
-}
+type DashboardProps = {
+  forcast: any;
+  weather: any;
+};
 
-export default function Dashboard() {
-  const Days: weeklyData[] = [
-    { day: "monday", temp: "45°", rain: "1.5%", humidity: "35%" },
-    { day: "monday", temp: "45°", rain: "1.5%", humidity: "35%" },
-    { day: "monday", temp: "45°", rain: "1.5%", humidity: "35%" },
-    { day: "monday", temp: "45°", rain: "1.5%", humidity: "35%" },
-    { day: "monday", temp: "45°", rain: "1.5%", humidity: "35%" },
-  ];
+export default function Dashboard({ forcast, weather }: DashboardProps) {
+  console.log("forcast", forcast);
+  if (!forcast || !weather) return null;
+
+  const currentDate = moment().format("dddd, DD MMMM YYYY");
+  const sunrise = moment.unix(weather.sys.sunrise).format("hh:mm A");
+  const sunset = moment.unix(weather.sys.sunset).format("hh:mm A");
+
   return (
     <div className="">
       <div className="grid grid-cols-12 gap-6 h-full">
         {/* LEFT SIDE */}
-        <Card className="col-span-8 p-6 h-full flex flex-col justify-between">
+        <Card className="col-span-12 sm:col-span-8 p-6 h-full flex flex-col justify-between">
           {/* Location */}
           <div className="flex flex-row gap-2 text-accent whitespace-nowrap">
             <MapPin className="w-5 h-5" />
             <span className="font-headline-md text-headline-md">
-              San Francisco, CA
+              {weather?.name}, {weather?.sys?.country}
             </span>
           </div>
 
-          <span>Monday, 12 June 2023</span>
+          <span>{currentDate}</span>
 
           {/* Temperature */}
           <div>
-            <span className="text-6xl font-bold text-accent">24°</span>
+            <span className="text-6xl font-bold text-accent">
+              {weather.main.temp}°
+            </span>
+            <span className=" bottom-0 right-0 text-xl font-semibold">C</span>
           </div>
-          <span className="text-3xl font-bold">Partly Cloudy</span>
+          <span className="text-3xl font-bold">
+            {weather.weather[0].description}
+          </span>
 
           {/* Footer cards */}
           <div className="grid grid-cols-9 gap-6 mt-6">
@@ -55,8 +57,8 @@ export default function Dashboard() {
                   <DropletIcon />
                 </div>
                 <div className="flex flex-col">
-                  <span>Humidity</span>
-                  <span className="font-bold">45%</span>
+                  <span>Humidity: </span>
+                  <span className="font-bold">{weather?.main.humidity}%</span>
                 </div>
               </div>
             </Card>
@@ -68,7 +70,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col whitespace-nowrap">
                   <span>WIND SPEED</span>
-                  <span className="font-bold">12km/h</span>
+                  <span className="font-bold">{weather.wind.speed} m/s</span>
                 </div>
               </div>
             </Card>
@@ -80,7 +82,9 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col">
                   <span>VISIBILITY</span>
-                  <span className="font-bold">10km</span>
+                  <span className="font-bold">
+                    {weather?.visibility / 1000} km
+                  </span>
                 </div>
               </div>
             </Card>
@@ -88,7 +92,7 @@ export default function Dashboard() {
         </Card>
 
         {/* RIGHT SIDE */}
-        <Card className="col-span-4 p-3 space-y-3">
+        <Card className="col-span-12 sm:col-span-4 p-3 space-y-3">
           {/* Title */}
           <div className="text-center">
             <span className="text-lg font-semibold">Daily Insight</span>
@@ -116,7 +120,7 @@ export default function Dashboard() {
               </div>
               <span className="text-xs">SUNRISE</span>
               <span className="font-bold text-sm whitespace-nowrap">
-                05:42 AM
+                {sunrise}
               </span>
             </div>
 
@@ -126,7 +130,7 @@ export default function Dashboard() {
               </div>
               <span className="text-xs">SUNSET</span>
               <span className="font-bold text-sm whitespace-nowrap">
-                08:14 PM
+                {sunset}
               </span>
             </div>
           </Card>
@@ -156,51 +160,51 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* day wise temp */}
+      {/* city wise temp */}
 
       <div className="overflow-x-auto py-6">
         <div className="flex gap-4 min-w-max">
-          {Days.map((d, index) => (
+          {forcast.list.map((d: any, index: number) => (
             <Card
-              className="p-3 text-center w-40 flex flex-col gap-2 shrink-0"
               key={index}
+              className="p-3 text-center w-40 flex flex-col gap-2 shrink-0"
             >
-              <span>{d.day}</span>
-              <Sun className="mx-auto size-5 " />
-              <span className="text-2xl font-bold">{d.temp}</span>
-              <div className="flex items-center justify-center gap-1 text-sm">
-                <Droplet className="w-4 h-4 text-accent" />
-                <span>{d.rain}</span>
-              </div>
-              <span className="text-xs text-gray-500">{d.humidity} Hum</span>
+              <span className="font-bold">{weather.name}</span>
+              <span className="text-2xl">{d.main.temp}°C</span>
+              <span className="text-sm">{d.weather[0].description}</span>
+              <span className="text-xs text-gray-500">
+                Humidity: {d.main.humidity}%
+              </span>
             </Card>
           ))}
         </div>
       </div>
+      {/* day wise temp */}
 
-      {/* Second row → 4 cards */}
-      <div className="grid grid-cols-4 gap-4 ">
-        <Card className="p-2 text-center">
-          <span className="text-sm font-medium">Sat</span>
-          <Moon className="mx-auto size-5 text-accent" />
-          <span className="font-bold">21°</span>
-        </Card>
-        <Card className="p-2 text-center">
-          <span className="text-sm font-medium">Sun</span>
-          <Sun className="mx-auto size-5 text-accent" />
-          <span className="font-bold">27°</span>
-        </Card>
-        <Card className="p-2 text-center">
-          <span className="text-sm font-medium">Mon</span>
-          <Moon className="mx-auto size-5 text-accent" />
-          <span className="font-bold">22°</span>
-        </Card>
-        <Card className="p-2 text-center">
-          <span className="text-sm font-medium">Tue</span>
-          <Sun className="mx-auto size-5 text-accent" />
-          <span className="font-bold">25°</span>
-        </Card>
+      <div className="grid grid-cols-4 gap-4">
+        {forcast.list.slice(0, 4).map((item: any, idx: number) => {
+          const day = moment(item.dt_txt).format("dddd");
+          const temp = Math.round(item.main.temp);
+          const condition = item.weather[0].main;
+
+          // choose icon based on condition
+          const Icon =
+            condition === "Clear"
+              ? Sun
+              : condition === "Clouds"
+                ? Moon
+                : DropletIcon;
+
+          return (
+            <Card key={idx} className="p-2 text-center">
+              <span className="text-sm font-medium">{day}</span>
+              <Icon className="mx-auto size-5 text-accent" />
+              <span className="font-bold">{temp}°</span>
+            </Card>
+          );
+        })}
       </div>
+
       <Button
         variant="primary"
         isIconOnly

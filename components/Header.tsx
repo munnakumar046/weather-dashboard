@@ -14,17 +14,19 @@ const Header = () => {
       </div>
 
       {/* Search Bar */}
-      <SearchField name="search">
-        {/* <Label>Search</Label> */}
-        <SearchField.Group>
-          <SearchField.SearchIcon />
-          <SearchField.Input
-            className="w-[280px]"
-            placeholder="Search city or forecast..."
-          />
-          <SearchField.ClearButton />
-        </SearchField.Group>
-      </SearchField>
+      <form action="/">
+        <SearchField name="city">
+          {/* <Label>Search</Label> */}
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input
+              className="w-70"
+              placeholder="Search city or forecast..."
+            />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
+      </form>
 
       {/* Notifications + User */}
       <div className="flex items-center gap-6">
