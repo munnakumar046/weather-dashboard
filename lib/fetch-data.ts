@@ -5,8 +5,3 @@ export async function fetchData(endpoint: string, options = {}) {
 
   return fetch(endpoint + `?appid=${appKey}&${queryString}`);
 }
-
-// fetchData("https://api.openweathermap.org/data/2.5/weather", {
-//   q: "City",
-//   units: "Metric",
-// });
